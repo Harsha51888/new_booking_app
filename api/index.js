@@ -10,7 +10,7 @@ const app = express();
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const jwt =require('jsonwebtoken');
-const jwtSecret = 'fasdfsdrte';
+const jwtSecret = process.env.JWT_SECRET;
 const cookieParser = require('cookie-parser');
 const bcryptSalt = bcrypt.genSaltSync(10);
 const imageDownloader = require('image-downloader');
@@ -19,7 +19,7 @@ const fs = require('fs');
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://mybookingapp-frontend.onrender.com'];
 app.use(cors({
     credentials: true,
     origin: function(origin, callback) {
@@ -241,7 +241,10 @@ app.get('/bookings', async (req, res) => {
     res.json(bookings);
   });
 });
-app.listen(4000);
+const port = process.env.PORT || 4000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
 // Return all places for the logged-in user (used by frontend /user-places fetch)
 app.get('/user-places', async (req, res) => {
   const { token } = req.cookies;
