@@ -1,3 +1,7 @@
+// Root route for health check or base API response
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
 const express = require('express');
 
 
