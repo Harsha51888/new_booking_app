@@ -1,7 +1,3 @@
-// Root route for health check or base API response
-app.get('/', (req, res) => {
-  res.send('API is running');
-});
 const express = require('express');
 
 
@@ -14,6 +10,11 @@ const app = express();
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 const jwt =require('jsonwebtoken');
+
+// Root route for health check or base API response
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
 const jwtSecret = process.env.JWT_SECRET;
 const cookieParser = require('cookie-parser');
 const bcryptSalt = bcrypt.genSaltSync(10);
@@ -104,7 +105,11 @@ app.get('/profile', (req, res) => {
     });
 });
 app.post('/logout', (req, res) => {
-    res.cookie('token', '').json(true);
+    res.cookie('token', '', {
+        httpOnly: true,
+        sameSite: 'lax',
+        expires: new Date(0),
+    }).json(true);
 });
 app.post('/upload-by-link', async (req, res) => {
   const { link } = req.body;

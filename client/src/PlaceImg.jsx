@@ -14,7 +14,8 @@ export default function PlaceImg({ place }) {
     <Image
       src={photosArr[0]}
       alt={place.title || "Place"}
-      style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px" }}
+      className="w-full h-full object-cover rounded-lg"
+      style={{ aspectRatio: '1/1', minHeight: 0, minWidth: 0 }}
     />
   );
 }

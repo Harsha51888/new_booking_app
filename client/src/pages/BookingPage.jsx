@@ -36,7 +36,7 @@ export default function BookingPage() {
           <div className="mt-6 bg-white rounded-2xl shadow p-6 flex flex-col md:flex-row gap-8 items-center justify-between border border-gray-100">
             <div className="flex flex-col items-center">
               <span className="text-lg font-semibold text-gray-700 mb-1">Guests</span>
-              <span className="text-2xl font-bold text-primary">{booking.place.maxGuests || booking.guests || 1}</span>
+              <span className="text-2xl font-bold text-blue-500">{booking.place.maxGuests || booking.guests || 1}</span>
             </div>
             <div className="flex flex-col items-center">
               <span className="text-lg font-semibold text-gray-700 mb-1">Perks</span>
@@ -56,7 +56,7 @@ export default function BookingPage() {
         {/* Right: Description, Address, Booking Info */}
         <div className="lg:w-1/2 w-full flex flex-col gap-6">
           <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
-            <AddressLink className="block text-lg text-primary font-medium mb-2" style={{textDecoration:'underline'}}>{booking.place.address}</AddressLink>
+            <AddressLink className="block text-lg text-blue-500 font-medium mb-2" style={{textDecoration:'underline'}}>{booking.place.address}</AddressLink>
             <h2 className="text-2xl font-semibold mb-3 text-gray-800">Description</h2>
             <div className="text-gray-700 text-base leading-relaxed whitespace-pre-line mb-2">{booking.place.description}</div>
           </div>
@@ -65,7 +65,7 @@ export default function BookingPage() {
             <BookingDates booking={booking} />
             <div className="bg-white p-6 rounded-2xl mt-8 w-full text-center shadow">
               <div className="text-gray-600 font-medium">Total price</div>
-              <div className="text-3xl font-bold text-primary">${booking.price}</div>
+              <div className="text-3xl font-bold text-blue-500">${booking.price}</div>
             </div>
           </div>
         </div>
