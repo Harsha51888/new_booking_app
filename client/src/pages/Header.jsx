@@ -8,7 +8,7 @@ export default function Header() {
     const navigate = useNavigate();
     function handleLogout(e) {
         e.stopPropagation();
-        fetch('http://localhost:4000/logout', {
+        fetch('https://mybookingapp-backend.onrender.com/logout', {
             method: 'POST',
             credentials: 'include',
             headers: {

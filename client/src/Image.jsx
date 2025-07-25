@@ -1,5 +1,5 @@
 export default function Image({ src, alt, ...props }) {
-  const backend = 'http://localhost:4000';
+  const backend = 'https://mybookingapp-backend.onrender.com';
   let safeSrc = src ? encodeURI(src) : "";
   if (safeSrc && safeSrc.startsWith('/uploads/')) {
     safeSrc = backend + safeSrc;
