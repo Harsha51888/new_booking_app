@@ -26,7 +26,7 @@ export default function BookingsPage() {
     <div className="w-full min-h-screen bg-gray-100 pb-10">
       <AccountNav />
       <div className="max-w-5xl mx-auto mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 px-2">
-        {bookings?.length > 0 && bookings.map(booking => (
+        {bookings?.length > 0 && bookings.filter(booking => booking.place).map(booking => (
           <Link
             to={`/account/bookings/${booking._id}`}
             className="flex flex-col md:flex-row bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-shadow duration-200 overflow-hidden group border border-gray-200"
@@ -37,7 +37,9 @@ export default function BookingsPage() {
             </div>
             <div className="flex-1 flex flex-col justify-between p-6 min-w-0">
               <div>
-                <h2 className="text-xl font-bold mb-2 text-gray-800 group-hover:text-blue-500 transition-colors break-words line-clamp-2 min-h-[2.5rem]">{booking.place.title}</h2>
+                <h2 className="text-xl font-bold mb-2 text-gray-800 group-hover:text-blue-500 transition-colors break-words line-clamp-2 min-h-[2.5rem]">
+                  {booking.place ? booking.place.title : 'No place info'}
+                </h2>
                 <BookingDates booking={booking} className="mb-2 mt-2 text-gray-500" />
               </div>
               <div className="flex items-center gap-2 mt-4">

@@ -8,7 +8,13 @@ export default function Header() {
     const navigate = useNavigate();
     function handleLogout(e) {
         e.stopPropagation();
-        fetch('https://mybookingapp-backend.onrender.com/logout', {
+        let backend;
+        if (window.location.hostname === 'localhost') {
+            backend = 'http://localhost:4000';
+        } else {
+            backend = 'https://mybookingapp-backend.onrender.com';
+        }
+        fetch(backend + '/logout', {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -27,7 +33,7 @@ export default function Header() {
     }
     return(
         <header className="relative flex justify-between items-center bg-gradient-to-r from-blue-600 to-teal-400 py-4 px-8 shadow-lg min-h-[100px] fixed top-0 left-0 w-full z-50">
-            <span className="font-extrabold text-4xl text-white tracking-wide">StayEZ</span>
+            <Link to="/" className="font-extrabold text-4xl text-white tracking-wide hover:underline">StayEZ</Link>
             <nav className="flex gap-4 items-center">
                 <Link to="/account/bookings" className="rounded-full bg-white/80 px-6 py-2 text-lg font-semibold text-gray-800 shadow hover:bg-white/90 transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

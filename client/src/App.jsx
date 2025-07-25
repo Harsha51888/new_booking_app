@@ -14,7 +14,12 @@ import BookingPage from './pages/BookingPage.jsx';
 import { UserContextProvider, UserContext } from "./UserContext";
 import { useContext } from 'react';
 
-axios.defaults.baseURL = 'https://mybookingapp-backend.onrender.com';
+// Set API base URL based on environment
+if (window.location.hostname === 'localhost') {
+  axios.defaults.baseURL = 'http://localhost:4000';
+} else {
+  axios.defaults.baseURL = 'https://mybookingapp-backend.onrender.com';
+}
 axios.defaults.withCredentials = true; 
 function AppRoutes() {
   const { user, ready } = useContext(UserContext);
