@@ -26,14 +26,13 @@ app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
 const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://mybookingapp-frontend.onrender.com'];
 app.use(cors({
-    credentials: true,
-    origin: function(origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+  credentials: true,
+  origin: allowedOrigins,
+}));
+// Handle preflight requests for all routes
+app.options('*', cors({
+  credentials: true,
+  origin: allowedOrigins,
 }));
 // Delete a place (accommodation) by ID, only if owned by the user
 app.delete('/places/:id', async (req, res) => {
