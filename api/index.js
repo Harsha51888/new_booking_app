@@ -24,6 +24,7 @@ const fs = require('fs');
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
+// List of allowed origins for CORS (local dev and deployed frontend)
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
