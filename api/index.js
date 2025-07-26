@@ -109,7 +109,14 @@ app.post('/login', async (req, res) => {
   }
   jwt.sign({ email: userDoc.email, id: userDoc._id }, jwtSecret, {}, (err, token) => {
     if (err) throw err;
-    res.cookie('token', token).json(userDoc);
+    // Set cookie flags for cross-site cookies in production
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+    res.cookie('token', token, {
+      httpOnly: true,
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction,
+      path: '/',
+    }).json(userDoc);
   });
 });
 app.get('/profile', (req, res) => {
@@ -122,10 +129,13 @@ app.get('/profile', (req, res) => {
     });
 });
 app.post('/logout', (req, res) => {
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
     res.cookie('token', '', {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: isProduction ? 'none' : 'lax',
+        secure: isProduction,
         expires: new Date(0),
+        path: '/',
     }).json(true);
 });
 app.post('/upload-by-link', async (req, res) => {
