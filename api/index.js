@@ -31,8 +31,20 @@ const allowedOrigins = [
   'http://localhost:5174',
   'https://booking-website-nctl.onrender.com'
 ];
+
+app.use((req, res, next) => {
+  console.log('CORS Origin:', req.headers.origin);
+  next();
+});
+
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 // Delete a place (accommodation) by ID, only if owned by the user
