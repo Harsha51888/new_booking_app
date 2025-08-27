@@ -17,5 +17,11 @@ export default function AccountNav() {
     }
     return classes;
   }
-    return null;
+    return (
+      <nav className="w-full flex justify-center gap-4 mb-8 mt-4">
+        <Link className={linkclasses('my profile')} to={'/account/'}>My Profile</Link>
+        <Link className={linkclasses('places')} to={'/account/places'}>My Accommodations</Link>
+        <Link className={linkclasses('bookings')} to={'/account/bookings'}>My Bookings</Link>
+      </nav>
+    );
 }

@@ -8,7 +8,13 @@ export default function Header() {
     const navigate = useNavigate();
     function handleLogout(e) {
         e.stopPropagation();
-        fetch('https://mybookingapp-backend.onrender.com/logout', {
+        let backend;
+        if (window.location.hostname === 'localhost') {
+            backend = 'http://localhost:4000';
+        } else {
+            backend = 'https://mybookingapp-backend.onrender.com';
+        }
+        fetch(backend + '/logout', {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -26,9 +32,9 @@ export default function Header() {
         });
     }
     return(
-        <header className="relative flex justify-between items-center bg-gradient-to-r from-blue-600 to-teal-400 py-4 px-8 shadow-lg min-h-[100px] fixed top-0 left-0 w-full z-50">
-            <span className="font-extrabold text-4xl text-white tracking-wide">StayEZ</span>
-            <nav className="flex gap-4 items-center">
+    <header className="relative flex flex-col md:flex-row justify-between items-center bg-gradient-to-r from-blue-600 to-teal-400 py-4 px-4 md:px-8 shadow-lg min-h-[80px] md:min-h-[100px] fixed top-0 left-0 w-full z-50">
+            <Link to="/" className="font-extrabold text-4xl text-white tracking-wide hover:underline">StayEZ</Link>
+            <nav className="flex flex-wrap gap-2 md:gap-4 items-center justify-center w-full md:w-auto mt-2 md:mt-0">
                 <Link to="/account/bookings" className="rounded-full bg-white/80 px-6 py-2 text-lg font-semibold text-gray-800 shadow hover:bg-white/90 transition flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
@@ -40,6 +46,12 @@ export default function Header() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />
                     </svg>
                     My Accommodations
+                </Link>
+                <Link to="/account/owner-bookings" className="rounded-full bg-white/80 px-6 py-2 text-lg font-semibold text-gray-800 shadow hover:bg-white/90 transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 6.75h15m-15 4.5h15m-15 4.5h15" />
+                    </svg>
+                    Guest Reservations
                 </Link>
             </nav>
             <div className="relative ml-4">

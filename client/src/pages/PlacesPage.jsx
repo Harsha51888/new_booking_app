@@ -28,7 +28,6 @@ export default function PlacesPage() {
   };
   return (
     <div>
-      <AccountNav />
         <div className="text-center mt-8">
           <Link className="inline-flex gap-1 bg-blue-400 text-white py-2 px-6 rounded-full hover:bg-blue-500 transition-colors" to={'/account/places/new'}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -37,7 +36,7 @@ export default function PlacesPage() {
             Add new place
           </Link>
         </div>
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
+  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full px-2 sm:px-4 md:px-8">
           {places.length > 0 && places.map(place => (
             <div key={place._id} className="flex flex-col bg-gray-100 p-4 rounded-2xl shadow hover:shadow-lg transition-all duration-200 group w-full h-full">
               <Link to={'/account/places/'+place._id} className="flex flex-col flex-1 min-w-0 w-full h-full">

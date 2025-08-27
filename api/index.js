@@ -24,15 +24,32 @@ const fs = require('fs');
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'https://mybookingapp-frontend.onrender.com'];
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://mybookingapp-frontend.onrender.com',
+];
 app.use(cors({
   credentials: true,
-  origin: allowedOrigins,
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
 }));
 // Handle preflight requests for all routes
 app.options('*', cors({
   credentials: true,
-  origin: allowedOrigins,
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
 }));
 // Delete a place (accommodation) by ID, only if owned by the user
 app.delete('/places/:id', async (req, res) => {
@@ -217,8 +234,10 @@ app.put('/places', async (req, res) => {
 app.get('/places', async (req, res) => {
   res.json(await Place.find());
 });
+
+// Create a booking, status defaults to 'pending'
 app.post('/bookings', async (req, res) => {
-  const userData =await getUserDataFromToken(req);
+  const userData = await getUserDataFromToken(req);
   const {
     place, checkIn, checkOut, numberOfGuests, name, phone, price
   } = req.body;
@@ -231,12 +250,43 @@ app.post('/bookings', async (req, res) => {
     name,
     phone,
     price,
-    user:userData.id,
-  }).then(( doc) => {
+    status: 'pending',
+  }).then((doc) => {
     res.json(doc);
   }).catch((err) => {
-    throw err;
+    res.status(500).json({ error: 'Booking creation failed.' });
   });
+});
+
+// Get bookings for places owned by the logged-in user (owner view)
+app.get('/owner/bookings', async (req, res) => {
+  const userData = await getUserDataFromToken(req);
+  if (!userData) return res.status(401).json({ error: 'Unauthorized' });
+  // Find places owned by user
+  const places = await Place.find({ owner: userData.id });
+  const placeIds = places.map(p => p._id);
+  // Find bookings for those places
+  const bookings = await Booking.find({ place: { $in: placeIds } }).populate('place user');
+  res.json(bookings);
+});
+
+// Accept or reject a booking (owner action)
+app.post('/owner/bookings/:id/status', async (req, res) => {
+  const userData = await getUserDataFromToken(req);
+  if (!userData) return res.status(401).json({ error: 'Unauthorized' });
+  const { id } = req.params;
+  const { status } = req.body; // 'accepted' or 'rejected'
+  if (!['accepted', 'rejected'].includes(status)) {
+    return res.status(400).json({ error: 'Invalid status.' });
+  }
+  const booking = await Booking.findById(id).populate('place');
+  if (!booking) return res.status(404).json({ error: 'Booking not found.' });
+  if (String(booking.place.owner) !== String(userData.id)) {
+    return res.status(403).json({ error: 'You are not allowed to update this booking.' });
+  }
+  booking.status = status;
+  await booking.save();
+  res.json(booking);
 });
 
   

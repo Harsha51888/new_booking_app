@@ -11,16 +11,29 @@ import axios from 'axios';
 import PlacePage from './pages/PlacePage.jsx';
 import BookingsPage from './pages/BookingsPage.jsx';
 import BookingPage from './pages/BookingPage.jsx';
+import OwnerBookingsPage from './pages/OwnerBookingsPage.jsx';
 import { UserContextProvider, UserContext } from "./UserContext";
 import { useContext } from 'react';
 
-axios.defaults.baseURL = 'https://mybookingapp-backend.onrender.com';
+// Set API base URL based on environment
+if (window.location.hostname === 'localhost') {
+  axios.defaults.baseURL = 'http://localhost:4000';
+} else {
+  axios.defaults.baseURL = 'https://mybookingapp-backend.onrender.com';
+}
 axios.defaults.withCredentials = true; 
 function AppRoutes() {
   const { user, ready } = useContext(UserContext);
   const location = useLocation();
+  if (!ready) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="text-lg text-gray-500">Loading...</div>
+      </div>
+    );
+  }
   // Only allow /login and /register if not logged in
-  if (ready && !user && location.pathname !== '/login' && location.pathname !== '/register') {
+  if (!user && location.pathname !== '/login' && location.pathname !== '/register') {
     return <Navigate to="/login" replace />;
   }
   return (
@@ -36,6 +49,7 @@ function AppRoutes() {
         <Route path="/place/:id" element={<PlacePage/>}/>
         <Route path="/account/bookings" element={<BookingsPage/>}/>  
         <Route path="/account/bookings/:id" element={<BookingPage/>}/>  
+        <Route path="/account/owner-bookings" element={<OwnerBookingsPage/>}/>  
       </Route>
     </Routes>
   );
