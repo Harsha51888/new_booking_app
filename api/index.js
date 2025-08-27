@@ -29,7 +29,6 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
-  'https://mybookingapp-frontend.onrender.com',
   'https://booking-website-nctl.onrender.com', // <-- your deployed frontend URL
 ];
 app.use(cors({
