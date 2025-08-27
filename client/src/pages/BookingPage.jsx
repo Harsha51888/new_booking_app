@@ -19,7 +19,18 @@ export default function BookingPage() {
       });
     }
   }, [id]);
-  if (!booking || !booking.place) {
+  if (!booking) {
+    return '';
+  }
+  if (!booking.place) {
+    return (
+      <div className="my-10 max-w-6xl mx-auto px-4 text-center text-red-500 text-xl font-semibold">
+        Accommodation not found. It may have been deleted.
+      </div>
+    );
+  }
+  }
+  if (!booking.place) {
     return (
       <div className="my-10 max-w-6xl mx-auto px-4 text-center text-red-500 text-xl font-semibold">
         Accommodation not found. It may have been deleted.
@@ -91,4 +102,4 @@ export default function BookingPage() {
       </div>
     </div>
   );
-}
+// ...existing code...

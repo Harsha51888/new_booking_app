@@ -23,8 +23,9 @@ export default function BookingsPage() {
     }
   }, [ready, user, navigate]);
   return (
-  <div className="w-full min-h-screen bg-gray-100 pb-10 px-2 sm:px-4 md:px-8">
-  <div className="max-w-5xl mx-auto mt-6 grid grid-cols-1 sm:grid-cols-2 gap-8 px-0 sm:px-2">
+    <div className="w-full min-h-screen bg-gray-100 pb-10">
+      <AccountNav />
+      <div className="max-w-5xl mx-auto mt-6 grid grid-cols-1 md:grid-cols-2 gap-8 px-2">
         {bookings?.length > 0 && bookings.filter(booking => booking.place).map(booking => (
           <Link
             to={`/account/bookings/${booking._id}`}

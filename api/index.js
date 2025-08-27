@@ -24,6 +24,34 @@ const fs = require('fs');
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
+// List of allowed origins for CORS (local dev and deployed frontend)
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://mybookingapp-frontend.onrender.com',
+];
+app.use(cors({
+  credentials: true,
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
+// Handle preflight requests for all routes
+app.options('*', cors({
+  credentials: true,
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
@@ -108,7 +136,14 @@ app.post('/login', async (req, res) => {
   }
   jwt.sign({ email: userDoc.email, id: userDoc._id }, jwtSecret, {}, (err, token) => {
     if (err) throw err;
-    res.cookie('token', token).json(userDoc);
+    // Set cookie flags for cross-site cookies in production
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+    res.cookie('token', token, {
+      httpOnly: true,
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction,
+      path: '/',
+    }).json(userDoc);
   });
 });
 app.get('/profile', (req, res) => {
@@ -121,10 +156,13 @@ app.get('/profile', (req, res) => {
     });
 });
 app.post('/logout', (req, res) => {
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
     res.cookie('token', '', {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: isProduction ? 'none' : 'lax',
+        secure: isProduction,
         expires: new Date(0),
+        path: '/',
     }).json(true);
 });
 app.post('/upload-by-link', async (req, res) => {
