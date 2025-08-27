@@ -25,33 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
 // List of allowed origins for CORS (local dev and deployed frontend)
-const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'https://mybookingapp-frontend.onrender.com',
-];
-app.use(cors({
-  credentials: true,
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, etc.)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-}));
-// Handle preflight requests for all routes
-app.options('*', cors({
-  credentials: true,
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-}));
+// ...existing code...
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
