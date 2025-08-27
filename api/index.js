@@ -29,30 +29,11 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
-  'https://booking-website-nctl.onrender.com', // <-- your deployed frontend URL
+  'https://booking-website-nctl.onrender.com'
 ];
 app.use(cors({
+  origin: allowedOrigins,
   credentials: true,
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, etc.)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      // For debugging, allow all origins
-      callback(null, true);
-    }
-  },
-}));
-// Handle preflight requests for all routes
-app.options('*', cors({
-  credentials: true,
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
 }));
 // Delete a place (accommodation) by ID, only if owned by the user
 app.delete('/places/:id', async (req, res) => {
