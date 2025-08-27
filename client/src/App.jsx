@@ -19,7 +19,7 @@ import { useContext } from 'react';
 if (window.location.hostname === 'localhost') {
   axios.defaults.baseURL = 'http://localhost:4000';
 } else {
-  axios.defaults.baseURL = 'https://mybookingapp-backend.onrender.com';
+  axios.defaults.baseURL = 'https://new-booking-app.onrender.com';
 }
 axios.defaults.withCredentials = true; 
 function AppRoutes() {

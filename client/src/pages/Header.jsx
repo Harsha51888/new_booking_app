@@ -12,7 +12,7 @@ export default function Header() {
         if (window.location.hostname === 'localhost') {
             backend = 'http://localhost:4000';
         } else {
-            backend = 'https://mybookingapp-backend.onrender.com';
+            backend = 'https://new-booking-app.onrender.com';
         }
         fetch(backend + '/logout', {
             method: 'POST',
